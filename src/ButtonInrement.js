@@ -1,14 +1,13 @@
+import { useDispatch } from "react-redux";
+import ActionType from "./state/GlobalActionType";
+
 const ButtonIncrement = (props) => {
-
-    const increment = () => {
-        props.increment(props.number+1)
-      }
-
+const dispatch = useDispatch()
   return (
     <>
         {props.number}
         <br/>
-      <button onClick={increment}>+</button>
+      <button onClick={() => dispatch({type: ActionType.PLUS})}>+</button>
     </>
   );
 };

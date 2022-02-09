@@ -1,16 +1,15 @@
+import { useDispatch } from "react-redux";
+import ActionType from "./state/GlobalActionType";
+
 const ButtonDecrement = (props) => {
 
-    const decrement = () => {
-        if(props.number > 0){
-            props.decrement(props.number-1)
-        }
-      }
+  const dispatch = useDispatch()
 
     return (
       <>
           {props.number}
           <br/>
-        <button onClick={decrement}>-</button>
+        <button onClick={() => dispatch({type: ActionType.MINUS})}>-</button>
       </>
     );
   };

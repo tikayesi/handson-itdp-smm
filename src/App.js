@@ -1,15 +1,14 @@
 import logo from './logo.svg';
 import './App.css';
-import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import ButtonIncrement from './ButtonInrement';
-import ButtonDecrement from './ButtonDecrement';
+import ButtonDecrement from './ButtonDecrement'
+import { Todos } from './component/Todos';
+import { ToDosForm } from './component/TodoForm';
 
 const App = () => {
-  const [number, setNumber] = useState(0)
 
-  const setNumberValue = (number) => {
-    setNumber(number)
-  }
+  const counter = useSelector((state) => state.nilai)
 
 
   return (
@@ -17,11 +16,11 @@ const App = () => {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
       </header>
-      {number}
-      <br/>
-      <ButtonIncrement number={number} increment={setNumberValue}/>
-      <br/>
-      <ButtonDecrement number={number} decrement={setNumberValue}/>
+      {counter}
+      <ButtonIncrement/>
+      <ButtonDecrement/>
+      <ToDosForm/>
+      <Todos/>
     </div>
   );
 }
