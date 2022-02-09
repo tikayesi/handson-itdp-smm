@@ -1,25 +1,29 @@
 import logo from './logo.svg';
 import './App.css';
-import { Component } from 'react';
-import BodyComponent from './BodyComponent';
+import { useState } from 'react';
+import ButtonIncrement from './ButtonInrement';
+import ButtonDecrement from './ButtonDecrement';
 
-class App extends Component {
+const App = () => {
+  const [number, setNumber] = useState(0)
 
-  name = "Jeremy"
+  const setNumberValue = (number) => {
+    setNumber(number)
+  }
 
-  render(){
+
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
       </header>
-      <p>{this.name}</p>
-      <BodyComponent nameFromParent = {this.name} address = "Medan"/>
-      <BodyComponent nameFromParent = "Gde" address = "Bali"/>
-      <BodyComponent nameFromParent = "Hariadi" address = "Jogja"/>
+      {number}
+      <br/>
+      <ButtonIncrement number={number} increment={setNumberValue}/>
+      <br/>
+      <ButtonDecrement number={number} decrement={setNumberValue}/>
     </div>
   );
-}
 }
 
 
