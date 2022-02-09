@@ -1,13 +1,14 @@
-import { useDispatch } from "react-redux";
+import { useContext } from "react";
+import { RootContext } from "./App";
 import ActionType from "./state/GlobalActionType";
 
-const ButtonIncrement = (props) => {
-const dispatch = useDispatch()
+const ButtonIncrement = () => {
+const nilai = useContext(RootContext)
   return (
     <>
-        {props.number}
+        {nilai.nilai.nilai}
         <br/>
-      <button onClick={() => dispatch({type: ActionType.PLUS})}>+</button>
+      <button onClick={() => nilai.dispatch({type: ActionType.PLUS})}>+</button>
     </>
   );
 };

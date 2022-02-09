@@ -1,15 +1,12 @@
-import { useDispatch } from "react-redux";
+import { useContext } from "react";
+import { RootContext } from "./App";
 import ActionType from "./state/GlobalActionType";
 
-const ButtonDecrement = (props) => {
-
-  const dispatch = useDispatch()
-
+const ButtonDecrement = () => {
+  const nilai = useContext(RootContext)
     return (
       <>
-          {props.number}
-          <br/>
-        <button onClick={() => dispatch({type: ActionType.MINUS})}>-</button>
+          <button onClick={() => nilai.dispatch({type: ActionType.MINUS})}>-</button>
       </>
     );
   };
