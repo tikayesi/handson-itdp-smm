@@ -1,38 +1,56 @@
-import logo from './logo.svg';
-import './App.css';
-import ButtonIncrement from './ButtonInrement';
-import ButtonDecrement from './ButtonDecrement'
-import { Todos } from './component/Todos';
-import { ToDosForm } from './component/TodoForm';
-import { createContext, useReducer, useState } from 'react';
-import ActionType from './state/GlobalActionType';
-import { initial, reducer } from './state/CounterReducerCtx';
-
-export const RootContext = createContext()
-
+import "./App.css";
+import {
+  BrowserRouter as Router,
+  Link,
+  Outlet,
+  Route,
+  Routes,
+} from "react-router-dom";
+import { Home } from "./pages/home/Home";
+import { Product } from "./pages/product/Product";
+import { Customer } from "./pages/customer/Customer";
+import { ProductForm } from "./pages/product/ProductForm";
+import { CustomerForm } from "./pages/customer/CustomerForm";
+import { NotFoundPage } from "./pages/shared/PageNotFound";
 
 const App = () => {
-
-const [nilai, dispatch] = useReducer(reducer, initial)
-
-const handleIncrement = (param) => {
-  dispatch(param)
-}
-
   return (
-    <RootContext.Provider value={{nilai: nilai, dispatch : handleIncrement}}>
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-      </header>
-      <ButtonIncrement/>
-      <ButtonDecrement/>
-      {/* <ToDosForm/>
-      <Todos/> */}
-    </div>
-    </RootContext.Provider>
-  );
-}
+    <Router>
+      {/* Navigation */}
+      <nav>
+        <ul>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+        </ul>
+        <ul>
+          <li>
+            <Link to="products">Product</Link>
+          </li>
+        </ul>
+        <ul>
+          <li>
+            <Link to="customers">Customer</Link>
+          </li>
+        </ul>
+      </nav>
 
+      {/* Configurasi */}
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="products" element={<Outlet />}>
+          <Route index element={<Product />} />
+          <Route path="form" element={<ProductForm />} />
+        </Route>
+        <Route path="customers" element={<Outlet />}>
+          <Route index element={<Customer />} />
+          <Route path="form" element={<CustomerForm />} />
+          <Route path=":name" element={<Customer />} />
+        </Route>
+        <Route path="*" element={<NotFoundPage/>}/>
+      </Routes>
+    </Router>
+  );
+};
 
 export default App;
