@@ -1,14 +1,16 @@
-import { useNavigate, useParams } from "react-router-dom"
+import { Outlet, Route, Routes } from "react-router-dom"
+import { CustomerForm } from "./component/CustomerForm"
+import { CustomerList } from "./component/CustomerList"
 
 export const Customer = () => {
-    let params = useParams();
-    let navigate = useNavigate();
-    console.log(params);
     return(
-      <>
-      <h2>Customer name : {params.name}</h2>
-      <button onClick={ () => navigate("/productssss/form")}>Add Product</button>
-      </>
+     <Routes>
+       <Route path="/" element={<Outlet />}>
+          <Route index element={<CustomerList />} />
+          <Route path="form" element={<CustomerForm />} />
+          <Route path=":name" element={<CustomerList />} />
+        </Route>
+     </Routes>
     )
   }
   

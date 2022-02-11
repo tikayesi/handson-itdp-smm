@@ -10,7 +10,7 @@ import { Home } from "./pages/home/Home";
 import { Product } from "./pages/product/Product";
 import { Customer } from "./pages/customer/Customer";
 import { ProductForm } from "./pages/product/ProductForm";
-import { CustomerForm } from "./pages/customer/CustomerForm";
+import { CustomerForm } from "./pages/customer/component/CustomerForm";
 import { NotFoundPage } from "./pages/shared/PageNotFound";
 
 const App = () => {
@@ -42,11 +42,7 @@ const App = () => {
           <Route index element={<Product />} />
           <Route path="form" element={<ProductForm />} />
         </Route>
-        <Route path="customers" element={<Outlet />}>
-          <Route index element={<Customer />} />
-          <Route path="form" element={<CustomerForm />} />
-          <Route path=":name" element={<Customer />} />
-        </Route>
+        <Route path="customers/*" element={<Customer />}/>
         <Route path="*" element={<NotFoundPage/>}/>
       </Routes>
     </Router>
