@@ -8,10 +8,14 @@ export const ProductForm = () => {
   console.log("param", params);
   const [newData, setNewData] = useState({});
   const navigate = useNavigate();
+  const readable = params.id ? true : false;
+  const [loading, setLoading] = useState(false)
 
 
   useEffect(() => {
+    if(params.id){
     getDataById()
+    }
   }, [])
 
   const getDataById = async () => {
@@ -21,18 +25,18 @@ export const ProductForm = () => {
   }
 
   const handleChangeId = (event) => {
-    setNewData()
+    setNewData({...newData, id:event.target.value})
 }
 
 const handleChangeName = (event) => {
-    setNewName(event.target.value)
+    setNewData({...newData, name:event.target.value})
 }
 
   const handleSubmit = async (event) => {
     try{
-       let res = await axios.post(`http://localhost:3000/products`, { id : newId, name : newName })
-        console.log(res);
-        console.log(res.data);
+      setLoading(true)
+       await axios.post(`http://localhost:3000/products`, { id : newData.id, name : newData.id })
+       setLoading(false);
       navigate("/products");
     } catch (error) {
       console.error(error);
@@ -42,9 +46,9 @@ const handleChangeName = (event) => {
 
 const handleUpdate = async (event) => {
     try{
-        let res = await axios.put(`http://localhost:3000/products`, { id : newId, name : newName })
-         console.log(res);
-         console.log(res.data);
+      setLoading(true)
+        await axios.put(`http://localhost:3000/products`, { id : newData.id, name : newData.name })
+        setLoading(false);
        navigate("/products");
      } catch (error) {
        console.error(error);
@@ -54,12 +58,15 @@ const handleUpdate = async (event) => {
 
   return (
     <div>
+      {loading ? <h1>Loading...</h1> : <div>
     <h2>Product Form</h2>
         <div className="form-group row">
         <label htmlFor="inputId" className="col-sm-2 col-form-label">Id</label>
         <div className="col-sm-10">
         <input type="text" className="form-control" id="inputId" placeholder="Id"
         value={newData.id || ''}
+        onChange={handleChangeId}
+        readOnly={readable}
         />
         </div>
     </div>
@@ -69,11 +76,15 @@ const handleUpdate = async (event) => {
         <div className="col-sm-10">
         <input type="text" className="form-control" id="inputName" placeholder="Name"
          value={newData.name || ''}
+         onChange={handleChangeName}
          />
         </div>
     </div>
     <br></br>
-    <input className="btn btn-primary" type="submit" value="Submit"/> 
+    <input className="btn btn-primary" type="submit" value="Submit"
+     onClick={(e) => params.id ? handleUpdate(e) : handleSubmit(e)}/> 
+     </div>
+}
     </div>
   );
 };

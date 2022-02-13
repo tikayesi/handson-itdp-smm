@@ -35,7 +35,7 @@ export const ProductList = () => {
         <>
         <div>
         <h2>Product List</h2>
-        <button type="button" className="btn btn-success">
+        <button type="button" className="btn btn-success" onClick={() => navigate('form')}>
           Add Product
         </button>
         <table className="table table-striped">
