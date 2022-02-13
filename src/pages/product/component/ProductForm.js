@@ -35,7 +35,7 @@ const handleChangeName = (event) => {
   const handleSubmit = async (event) => {
     try{
       setLoading(true)
-       await axios.post(`http://localhost:3000/products`, { id : newData.id, name : newData.id })
+       await axios.post(`http://localhost:3000/products`, newData)
        setLoading(false);
       navigate("/products");
     } catch (error) {
@@ -47,7 +47,7 @@ const handleChangeName = (event) => {
 const handleUpdate = async (event) => {
     try{
       setLoading(true)
-        await axios.put(`http://localhost:3000/products`, { id : newData.id, name : newData.name })
+        await axios.put(`http://localhost:3000/products`, newData)
         setLoading(false);
        navigate("/products");
      } catch (error) {
