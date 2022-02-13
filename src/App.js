@@ -7,11 +7,10 @@ import {
   Routes,
 } from "react-router-dom";
 import { Home } from "./pages/home/Home";
-import { Product } from "./pages/product/Product";
 import { Customer } from "./pages/customer/Customer";
-import { ProductForm } from "./pages/product/ProductForm";
-import { CustomerForm } from "./pages/customer/component/CustomerForm";
+import { ProductForm } from "./pages/product/component/ProductForm";
 import { NotFoundPage } from "./pages/shared/PageNotFound";
+import { ProductList } from "./pages/product/component/ProductList";
 
 const App = () => {
   return (
@@ -39,8 +38,9 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="products" element={<Outlet />}>
-          <Route index element={<Product />} />
+          <Route index element={<ProductList />} />
           <Route path="form" element={<ProductForm />} />
+          <Route path="form/:id" element={<ProductForm />} />
         </Route>
         <Route path="customers/*" element={<Customer />}/>
         <Route path="*" element={<NotFoundPage/>}/>
