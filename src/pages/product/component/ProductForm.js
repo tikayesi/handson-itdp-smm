@@ -1,6 +1,6 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { createProduct, getProduct, updateProduct } from "../service/ProductService";
 
 export const ProductForm = () => {
   // let params = useLocation()
@@ -19,7 +19,7 @@ export const ProductForm = () => {
   }, [])
 
   const getDataById = async () => {
-    const res = await axios.get(`http://localhost:3000/products/${params.id}`)
+    const res = await getProduct(params.id)
     console.log("response data", res);
     setNewData(res.data)
   }
@@ -35,7 +35,7 @@ const handleChangeName = (event) => {
   const handleSubmit = async (event) => {
     try{
       setLoading(true)
-       await axios.post(`http://localhost:3000/products`, newData)
+       await createProduct(newData)
        setLoading(false);
       navigate("/products");
     } catch (error) {
@@ -47,7 +47,7 @@ const handleChangeName = (event) => {
 const handleUpdate = async (event) => {
     try{
       setLoading(true)
-        await axios.put(`http://localhost:3000/products`, newData)
+        await updateProduct(newData)
         setLoading(false);
        navigate("/products");
      } catch (error) {

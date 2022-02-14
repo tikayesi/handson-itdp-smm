@@ -1,18 +1,18 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { deleteProduct, getProducts } from "../service/ProductService";
 
 export const ProductList = () => {
     const [list, setList] = useState([])
     let navigate = useNavigate();
 
     useEffect(() => {
-        getProducts()
+        getListProduct()
     }, [])
 
-    const getProducts = async () => {
+    const getListProduct = async () => {
         try{
-       const response = await axios.get("http://localhost:3000/products");
+       const response = await getProducts();
        setList(response.data.products);
        console.log("response: ", response);
         } catch (error) {
@@ -23,9 +23,9 @@ export const ProductList = () => {
     const handleDelete = async (data) => {
         try{
             if(window.confirm(`Are you sure to delete ${data.name} ?`)){
-        await axios.delete(`http://localhost:3000/products/${data.id}`)
+        await deleteProduct(data.id);
         // navigate('form',{state: data})
-        await getProducts()}
+        await getListProduct()}
         } catch (error){
             console.log("error: ", error);
         }
