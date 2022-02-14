@@ -55,7 +55,7 @@ export const ProductList = () => {
                   <td>{product.id}</td>
                   <td>{product.name}</td>
                   <td>
-                  <button onClick={() => navigate(`form/${product.id}`)}>Update</button>
+                  <button onClick={() => navigate(`form/${product.id}`, {name: "gio"})}>Update</button>
                       <button onClick={() => handleDelete(product)}>Delete</button>
                       </td>
                 </tr>

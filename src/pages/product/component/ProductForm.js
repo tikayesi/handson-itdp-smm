@@ -1,12 +1,13 @@
+import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { createProduct, getProduct, updateProduct } from "../service/ProductService";
+import * as Yup from "yup";
 
 export const ProductForm = () => {
-  // let params = useLocation()
+  // let data = useLocation()
   let params = useParams()
   console.log("param", params);
-  const [newData, setNewData] = useState({});
   const navigate = useNavigate();
   const readable = params.id ? true : false;
   const [loading, setLoading] = useState(false)
@@ -18,54 +19,68 @@ export const ProductForm = () => {
     }
   }, [])
 
+
+  const formik = useFormik({
+    initialValues: {
+      id: "",
+      name : ""
+    },
+    validationSchema: Yup.object({
+      id: Yup.string().required("This field is required"),
+      name : Yup.string().required("This field is required").min(5, "Minimum 5 character")
+    }),
+    onSubmit: () => {
+      if(params.id){
+        handleUpdate();
+      }else{
+        handleSubmit()
+      }
+    }
+  })
+
   const getDataById = async () => {
     const res = await getProduct(params.id)
     console.log("response data", res);
-    setNewData(res.data)
+    formik.values.id = res.data.id;
+    formik.values.name = res.data.name;
+    formik.setFieldValue();
+
   }
 
-  const handleChangeId = (event) => {
-    setNewData({...newData, id:event.target.value})
-}
 
-const handleChangeName = (event) => {
-    setNewData({...newData, name:event.target.value})
-}
-
-  const handleSubmit = async (event) => {
+  const handleSubmit = async () => {
     try{
       setLoading(true)
-       await createProduct(newData)
+       await createProduct(formik.values)
        setLoading(false);
       navigate("/products");
     } catch (error) {
       console.error(error);
     }
-    event.preventDefault()
 }
 
-const handleUpdate = async (event) => {
+const handleUpdate = async () => {
     try{
       setLoading(true)
-        await updateProduct(newData)
+        await updateProduct(formik.values)
         setLoading(false);
        navigate("/products");
      } catch (error) {
        console.error(error);
      }
-    event.preventDefault()
 }
 
   return (
     <div>
       {loading ? <h1>Loading...</h1> : <div>
     <h2>Product Form</h2>
+    <form onSubmit={formik.handleSubmit}>
         <div className="form-group row">
         <label htmlFor="inputId" className="col-sm-2 col-form-label">Id</label>
         <div className="col-sm-10">
-        <input type="text" className="form-control" id="inputId" placeholder="Id"
-        value={newData.id || ''}
-        onChange={handleChangeId}
+        <input type="text" className="form-control" id="inputId" placeholder="Id" name="id"
+        value={formik.values.id || ''}
+        onChange={formik.handleChange}
         readOnly={readable}
         />
         </div>
@@ -74,15 +89,19 @@ const handleUpdate = async (event) => {
     <div className="form-group row">
         <label htmlFor="inputName" className="col-sm-2 col-form-label">Name</label>
         <div className="col-sm-10">
-        <input type="text" className="form-control" id="inputName" placeholder="Name"
-         value={newData.name || ''}
-         onChange={handleChangeName}
+        <input type="text" className="form-control" id="inputName" placeholder="Name" name="name"
+         value={formik.values.name || ''}
+         onChange={formik.handleChange}
+         onBlur={formik.handleBlur}
          />
+         {formik.errors.name && formik.touched.name ? (
+           <small className="text-danger">{formik.errors.name}</small>
+         ) : null}
         </div>
     </div>
     <br></br>
-    <input className="btn btn-primary" type="submit" value="Submit"
-     onClick={(e) => params.id ? handleUpdate(e) : handleSubmit(e)}/> 
+    <input className="btn btn-primary" type="submit" value="Submit"/> 
+     </form>
      </div>
 }
     </div>
