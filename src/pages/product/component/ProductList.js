@@ -1,41 +1,23 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { deleteProduct, getProducts } from "../service/ProductService";
+import { useEffect } from "react";
 
-export const ProductList = () => {
-    const [list, setList] = useState([])
-    let navigate = useNavigate();
+export const ProductList = ({ bloc }) => {
+  const { list, getListProduct, handleDelete, handleAdd, handleUpdate } =
+    bloc();
+  useEffect(() => {
+    getListProduct();
+  }, []);
 
-    useEffect(() => {
-        getListProduct()
-    }, [])
-
-    const getListProduct = async () => {
-        try{
-       const response = await getProducts();
-       setList(response.data.products);
-       console.log("response: ", response);
-        } catch (error) {
-            console.log(error);
-        }
-    }   
-
-    const handleDelete = async (data) => {
-        try{
-            if(window.confirm(`Are you sure to delete ${data.name} ?`)){
-        await deleteProduct(data.id);
-        // navigate('form',{state: data})
-        await getListProduct()}
-        } catch (error){
-            console.log("error: ", error);
-        }
+  const handleDel = (data) => {
+    if (window.confirm(`Are you sure to delete ${data.name} ?`)) {
+      handleDelete(data);
     }
+  };
 
-    return(
-        <>
-        <div>
+  return (
+    <>
+      <div>
         <h2>Product List</h2>
-        <button type="button" className="btn btn-success" onClick={() => navigate('form')}>
+        <button type="button" className="btn btn-success" onClick={handleAdd}>
           Add Product
         </button>
         <table className="table table-striped">
@@ -55,9 +37,11 @@ export const ProductList = () => {
                   <td>{product.id}</td>
                   <td>{product.name}</td>
                   <td>
-                  <button onClick={() => navigate(`form/${product.id}`, {name: "gio"})}>Update</button>
-                      <button onClick={() => handleDelete(product)}>Delete</button>
-                      </td>
+                    <button onClick={() => handleUpdate(product.id)}>
+                      Update
+                    </button>
+                    <button onClick={() => handleDel(product)}>Delete</button>
+                  </td>
                 </tr>
               );
             })}
@@ -65,5 +49,5 @@ export const ProductList = () => {
         </table>
       </div>
     </>
-    )
-  }
+  );
+};
